@@ -49,6 +49,11 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     string private _symbol;
     address private _owner;
 
+    modifier onlyOwner {
+        require(msg.sender == _owner, "Only owner can do this action");
+        _;
+    }
+
 
 
     constructor (string memory name_, string memory symbol_,uint256 initialBalance_,uint256 decimals_) {
@@ -148,7 +153,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         return true;
     }
 
-    function burn(uint256 amount) public returns(bool) {
+    function burn(uint256 amount) public onlyOwner returns(bool) {
         require(_balances[msg.sender] >= amount, "Amount exceded");
         _balances[msg.sender] -= amount;
         _totalSupply -= amount;
